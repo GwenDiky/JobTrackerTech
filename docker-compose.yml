@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jobtracker
+    ports:
+      - "8082:8082"
+    env_file:
+      - .env
+    environment:
+      - PYTHONBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONPATH=/app
+    depends_on:
+      - pgdb_tracker
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d harmonio_project"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgdb_tracker:
+    image: postgres:bullseye
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres-data-har:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d harmonio_project"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-data-har:

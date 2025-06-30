@@ -1,0 +1,21 @@
+# PyCharm
+.idea/
+
+# Poetry
+poetry.lock
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+# Other
+.env
+*.sqlite3
+node_modules/
+build/
+staticfiles/
+media/
+poetry/cache/
+poetry/virtualenvs/
